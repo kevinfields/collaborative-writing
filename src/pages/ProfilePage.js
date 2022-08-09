@@ -21,7 +21,6 @@ const ProfilePage = (props) => {
   };
 
   const openNameChanger = () => {
-    console.log('hi')
     setNameChanger({
       ...nameChanger,
       open: true,
@@ -39,7 +38,6 @@ const ProfilePage = (props) => {
   };
 
   const closeNameChanger = () => {
-    console.log('bye')
     setNameChanger({
       newName: '',
       open: false,

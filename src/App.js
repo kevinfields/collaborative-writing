@@ -9,6 +9,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import AllUsersPage from './pages/AllUsersPage';
+import CurrentProjectsPage from './pages/CurrentProjectsPage';
+import NewProjectPage from './pages/NewProjectPage';
 
 
 function App() {
@@ -35,11 +37,11 @@ function App() {
   };
 
   const openCurrentProjects = async () => {
-
+    setTab(3);
   };
 
   const createNewProject = async () => {
-
+    setTab(4);
   };
 
   const openCompletedProjects = async () => {
@@ -88,7 +90,21 @@ function App() {
           userRef={firestore.collection('users').doc(user.uid)}
           firestore={firestore}
           user={user}
+          goBack={() => setTab(0)}
           openProfile={() => setTab(1)}
+        />
+      : tab === 3 ?
+        <CurrentProjectsPage
+          userRef={firestore.collection('users').doc(user.uid)}
+          currentProjectsRef={firestore.collection('currentProjects')}
+          goBack={() => setTab(0)}
+        />
+      : tab === 4 ?
+        <NewProjectPage 
+          userRef={firestore.collection('users').doc(user.uid)}
+          usersRef={firestore.collection('users')}
+          currentProjectsRef={firestore.collection('currentProjects')}
+          goBack={() => setTab(0)}
         />
       : null
       }

@@ -20,3 +20,12 @@ code {
   top: 10vh;
   border: 1px solid black;
 }
+
+
+.select-flexbox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 55vw;
+  margin-right: 2.5vw;
+}

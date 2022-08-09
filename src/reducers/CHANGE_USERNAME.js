@@ -17,7 +17,6 @@ export default async function CHANGE_USERNAME(userRef, takenNamesRef, newName) {
   });
 
   const oldName = data.username;
-  console.log('oldName: ' + oldName)
 
   nameList.push(newName);
   nameList = nameList.filter(item => item !== oldName);

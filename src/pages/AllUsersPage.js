@@ -95,6 +95,11 @@ const AllUsersPage = (props) => {
         <Loading />
       :
         <Card>
+          <Button
+            onClick={() => props.goBack()}
+          >
+            Go Back
+          </Button>
           {users.map(user => (
             <CardContent>
               <Typography>Name: {user.name} {"("}{user.id}{")"}</Typography>

@@ -78,6 +78,7 @@ function App() {
       : tab === 1 ?
         <ProfilePage
           userRef={firestore.collection('users').doc(user.uid)}
+          takenNamesRef={firestore.collection('taken_usernames').doc('list')}
           goBack={() => setTab(0)}
         />
       : tab === 2 ?

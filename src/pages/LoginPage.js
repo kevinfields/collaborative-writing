@@ -2,6 +2,7 @@ import React from "react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import "firebase/compat/auth";
+import CREATE_ACCOUNT from "../reducers/CREATE_ACCOUNT";
 
 const LoginPage = (props) => {
 
@@ -15,16 +16,7 @@ const LoginPage = (props) => {
       });
 
     if (data === undefined) {
-      await props.usersRef.doc(user.uid).set({
-        name: user.displayName,
-        email: user.email,
-        completedProjectIds: [],
-        currentProjectIds: [],
-        friends: [],
-        instruments: [],
-        receivedFriendRequests: [],
-        sentFriendRequests: [],
-      })
+      await CREATE_ACCOUNT(user, props.usersRef);
     }
   }
 

@@ -102,6 +102,7 @@ function App() {
       : tab === 4 ?
         <NewProjectPage 
           userRef={firestore.collection('users').doc(user.uid)}
+          uid={user.uid}
           usersRef={firestore.collection('users')}
           currentProjectsRef={firestore.collection('currentProjects')}
           goBack={() => setTab(0)}

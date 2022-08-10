@@ -35,6 +35,8 @@ const NewProjectPage = (props) => {
       friendList = doc.data().friends;
     })
 
+    friendList.push(props.uid)
+
     for (const user of friendList) {
       await props.usersRef.doc(user).get().then(doc => {
         friendObjects.push({
@@ -119,12 +121,11 @@ const NewProjectPage = (props) => {
     let order = [];
 
     for (const instrument in members) {
-      if (!teamIds.includes(members[instrument])) {
-        teamIds.push(members[instrument]);
+      if (!teamIds.includes(members[instrument].id)) {
+        teamIds.push(members[instrument].id);
       }
     };
 
-    console.log(teamIds);
     if (teamIds.length > 5) {
       order = teamIds;
     } else {
@@ -135,16 +136,16 @@ const NewProjectPage = (props) => {
     const projectObject = {
 
       data: {
-        bass: members.bass,
-        drums: members.drums,
-        guitar: members.guitar,
-        keyboards: members.keyboards,
-        vocals: members.vocals,
+        bass: members.bass.id,
+        drums: members.drums.id,
+        guitar: members.guitar.id,
+        keyboards: members.keyboards.id,
+        vocals: members.vocals.id,
         teamIds: teamIds,
         order: order,
         currentRound: 0,
       },
-      id: 'test_project_1'
+      id: 'test_project_2'
     };
 
 
@@ -172,47 +173,47 @@ const NewProjectPage = (props) => {
       <div className='select-flexbox'>
         <Typography>Choose a Bassist: </Typography>
         <Select 
-          value={members.bass}
+          value={members.bass.username}
           onChange={(e) => setMembers({...members, bass: e.target.value})}
         >
           {roleLists.bass.map(item => (
-            <MenuItem value={item.id}>{item.username}</MenuItem>
+            <MenuItem value={{id: item.id, username: item.username}}>{item.username}</MenuItem>
           ))}
         </Select>
         <Typography>Choose a Drummer: </Typography>
         <Select 
-          value={members.drums}
+          value={members.drums.username}
           onChange={(e) => setMembers({...members, drums: e.target.value})}
         >
           {roleLists.drums.map(item => (
-            <MenuItem value={item.id}>{item.username}</MenuItem>
+            <MenuItem value={{id: item.id, username: item.username}}>{item.username}</MenuItem>
           ))}
         </Select>
         <Typography>Choose a Guitarist: </Typography>
         <Select 
-          value={members.guitar}
+          value={members.guitar.username}
           onChange={(e) => setMembers({...members, guitar: e.target.value})}
         >
           {roleLists.guitar.map(item => (
-            <MenuItem value={item.id}>{item.username}</MenuItem>
+            <MenuItem value={{id: item.id, username: item.username}}>{item.username}</MenuItem>
           ))}
         </Select>
         <Typography>Choose a Keyboardist: </Typography>
         <Select 
-          value={members.keyboards}
+          value={members.keyboards.username}
           onChange={(e) => setMembers({...members, keyboards: e.target.value})}
         >
           {roleLists.keyboards.map(item => (
-            <MenuItem value={item.id}>{item.username}</MenuItem>
+            <MenuItem value={{id: item.id, username: item.username}}>{item.username}</MenuItem>
           ))}
         </Select>
         <Typography>Choose a Vocalist: </Typography>
         <Select 
-          value={members.vocals}
+          value={members.vocals.username}
           onChange={(e) => setMembers({...members, vocals: e.target.value})}
         >
           {roleLists.vocals.map(item => (
-            <MenuItem value={item.id}>{item.username}</MenuItem>
+            <MenuItem value={{id: item.id, username: item.username}}>{item.username}</MenuItem>
           ))}
         </Select>
       </div>
@@ -221,11 +222,11 @@ const NewProjectPage = (props) => {
           marginTop: '5vh',
         }}
       >
-        <Typography>Bass: {members.bass}</Typography>
-        <Typography>Drums: {members.drums}</Typography>
-        <Typography>Guitar: {members.guitar}</Typography>
-        <Typography>Keyboards: {members.keyboards}</Typography>
-        <Typography>Vocals: {members.vocals}</Typography>
+        <Typography>Bass: {members.bass.username}</Typography>
+        <Typography>Drums: {members.drums.username}</Typography>
+        <Typography>Guitar: {members.guitar.username}</Typography>
+        <Typography>Keyboards: {members.keyboards.username}</Typography>
+        <Typography>Vocals: {members.vocals.username}</Typography>
       </Card>
       {
       allowCreate ? 

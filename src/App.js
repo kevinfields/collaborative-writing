@@ -11,6 +11,7 @@ import ProfilePage from './pages/ProfilePage';
 import AllUsersPage from './pages/AllUsersPage';
 import CurrentProjectsPage from './pages/CurrentProjectsPage';
 import NewProjectPage from './pages/NewProjectPage';
+import SingleProjectPage from './pages/SingleProjectPage';
 
 
 function App() {
@@ -28,8 +29,7 @@ function App() {
   const firestore = firebase.firestore();
   const background = document.getElementsByTagName("html")[0];
   const [user] = useAuthState(auth);
-  
-  const [tab, setTab] = useState(0);
+  const [currentId, setCurrentId] = useState('-1');
   const navigate = useNavigate();
 
   const loginUser = () => {
@@ -37,11 +37,11 @@ function App() {
   };
 
   const openCurrentProjects = async () => {
-    setTab(3);
+    navigate(`/${user.uid}/current_projects`);
   };
 
   const createNewProject = async () => {
-    setTab(4);
+    navigate('/new_project');
   };
 
   const openCompletedProjects = async () => {
@@ -49,12 +49,19 @@ function App() {
   };
 
   const openProfile = async () => {
-    setTab(1);
+    navigate(`/${user.uid}/my_profile`);
   };
 
   const openAllUsersPage = async () => {
-    setTab(2);
+    navigate('/all_users');
   }
+
+  useEffect(() => {
+
+    if (currentId !== '-1') {
+      navigate(`/${user.uid}/current_projects/${currentId}`)
+    }
+  }, [currentId]);
 
   return (
     <div className="page">
@@ -64,50 +71,86 @@ function App() {
           usersRef={firestore.collection("users")}
           onLogin={() => loginUser()}
         />
-      : tab === 0 ?
-        <HomePageButtons
-          createNewProject={() => createNewProject()}
-          openCurrentProjects={() => openCurrentProjects()}
-          openCompletedProjects={() => openCompletedProjects()}
-          openProfile={() => openProfile()}
-          openAllUsersPage={() => openAllUsersPage()}
-          user={user}
-          firestore={firestore}
-          userRef={firestore.collection('users').doc(user.uid)}
-          completedProjectsRef={firestore.collection('completedProjects')}
-          currentProjectsRef={firestore.collection('currentProjects')}
+      : 
+      <Routes>
+        <Route
+          exact
+          path='/'
+          element={
+            <HomePageButtons
+              createNewProject={() => createNewProject()}
+              openCurrentProjects={() => openCurrentProjects()}
+              openCompletedProjects={() => openCompletedProjects()}
+              openProfile={() => openProfile()}
+              openAllUsersPage={() => openAllUsersPage()}
+              user={user}
+              firestore={firestore}
+              userRef={firestore.collection('users').doc(user.uid)}
+              completedProjectsRef={firestore.collection('completedProjects')}
+              currentProjectsRef={firestore.collection('currentProjects')}
+            />
+          }
         />
-      : tab === 1 ?
-        <ProfilePage
-          userRef={firestore.collection('users').doc(user.uid)}
-          takenNamesRef={firestore.collection('taken_usernames').doc('list')}
-          goBack={() => setTab(0)}
+        <Route
+          path={`/:${user.uid}/my_profile`}
+          element={
+            <ProfilePage
+              userRef={firestore.collection('users').doc(user.uid)}
+              takenNamesRef={firestore.collection('taken_usernames').doc('list')}
+              goBack={() => navigate('/')}
+            />
+          }
         />
-      : tab === 2 ?
-        <AllUsersPage
-          usersRef={firestore.collection('users')}
-          uid={user.uid}
-          userRef={firestore.collection('users').doc(user.uid)}
-          firestore={firestore}
-          user={user}
-          goBack={() => setTab(0)}
-          openProfile={() => setTab(1)}
+        <Route
+          path={'/all_users'}
+          element={
+            <AllUsersPage
+              usersRef={firestore.collection('users')}
+              uid={user.uid}
+              userRef={firestore.collection('users').doc(user.uid)}
+              firestore={firestore}
+              user={user}
+              goBack={() => navigate('/')}
+              openProfile={() => navigate(`/:${user.uid}/profile`)}
+            />
+          }
         />
-      : tab === 3 ?
-        <CurrentProjectsPage
-          userRef={firestore.collection('users').doc(user.uid)}
-          currentProjectsRef={firestore.collection('currentProjects')}
-          goBack={() => setTab(0)}
+        <Route
+          path={`/:${user.uid}/current_projects`}
+          element={
+            <CurrentProjectsPage
+              userRef={firestore.collection('users').doc(user.uid)}
+              currentProjectsRef={firestore.collection('currentProjects')}
+              chooseProject={(id) => navigate(`/${user.uid}/current_projects/${id}`)}
+              goBack={() => navigate('/')}
+            />
+          }
         />
-      : tab === 4 ?
-        <NewProjectPage 
-          userRef={firestore.collection('users').doc(user.uid)}
-          uid={user.uid}
-          usersRef={firestore.collection('users')}
-          currentProjectsRef={firestore.collection('currentProjects')}
-          goBack={() => setTab(0)}
+        <Route
+          path={'/new_project'}
+          element={
+            <NewProjectPage 
+              userRef={firestore.collection('users').doc(user.uid)}
+              uid={user.uid}
+              usersRef={firestore.collection('users')}
+              currentProjectsRef={firestore.collection('currentProjects')}
+              goBack={() => navigate('/')}
+            />
+          }
         />
-      : null
+        <Route
+          path={`/${user.uid}/current_projects/:projectID`}
+          element={
+            <SingleProjectPage
+              userRef={firestore.collection('users').doc(user.uid)}
+              uid={user.uid}
+              usersRef={firestore.collection('users')}
+              currentProjectsRef={firestore.collection('currentProjects')}
+              goBack={() => navigate('/')}
+            />
+          }
+        />
+      </Routes>
       }
     </div>
   );

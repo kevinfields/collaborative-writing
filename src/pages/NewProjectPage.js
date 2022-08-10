@@ -136,16 +136,16 @@ const NewProjectPage = (props) => {
     const projectObject = {
 
       data: {
-        bass: members.bass.id,
-        drums: members.drums.id,
-        guitar: members.guitar.id,
-        keyboards: members.keyboards.id,
-        vocals: members.vocals.id,
+        bass: members.bass.username,
+        drums: members.drums.username,
+        guitar: members.guitar.username,
+        keyboards: members.keyboards.username,
+        vocals: members.vocals.username,
         teamIds: teamIds,
         order: order,
         currentRound: 0,
       },
-      id: 'test_project_2'
+      id: 'test_project_' + (Math.floor(Math.random() * 99999999) + 1),
     };
 
 

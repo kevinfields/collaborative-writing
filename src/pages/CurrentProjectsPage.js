@@ -39,6 +39,7 @@ const CurrentProjectsPage = (props) => {
               projectId={item.id}
               project={item}
               projectData={item.data}
+              onSelect={() => props.chooseProject(item.id)}
             />
           ))
       }

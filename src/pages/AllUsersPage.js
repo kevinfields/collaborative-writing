@@ -97,6 +97,10 @@ const AllUsersPage = (props) => {
         <Card>
           <Button
             onClick={() => props.goBack()}
+            variant='contained'
+            sx={{
+              margin: '1vh',
+            }}
           >
             Go Back
           </Button>

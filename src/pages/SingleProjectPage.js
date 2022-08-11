@@ -32,6 +32,11 @@ const SingleProjectPage = (props) => {
     loadProject();
   }, []);
 
+  useEffect(() => {
+
+    console.log('project.turnOf: ' + project.turnOf )
+  }, [project])
+
   const takeTurn = async () => {
 
     if (props.username === '') {
@@ -48,9 +53,24 @@ const SingleProjectPage = (props) => {
       {loading ? 
         <Loading />
         :
-        <Card>
-          <Button onClick={() => props.goBack()}>Go Back</Button>
-          <CardHeader title={projectID} />
+        <Card
+          sx={{
+            width: '95%',
+            marginLeft: '2.5%',
+            height: '60%',
+            border: '1px solid blue',
+          }}
+        >
+          <Button 
+            onClick={() => props.goBack()}
+            variant='contained'
+            sx={{
+              margin: '1vh',
+            }}
+          >
+            Go Back
+          </Button>
+          <CardHeader title={project.title} />
           <CardContent
             sx={{
               display: 'flex',
@@ -61,17 +81,61 @@ const SingleProjectPage = (props) => {
               overflowY: 'scroll',
             }}
           >
-            <Typography>Bass: {project.bass}</Typography>
-            <Typography>Drums: {project.drums}</Typography>
-            <Typography>Guitar: {project.guitar}</Typography>
-            <Typography>Keyboards: {project.keyboards}</Typography>
-            <Typography>Vocals: {project.vocals}</Typography>
-            <Typography>Order: {project.order.join(' ')}</Typography>
-            <Typography>Current Round: {project.currentRound}</Typography>
+            <Typography>Project Id: {projectID}</Typography>
+            <Typography
+              sx={{
+                color: project.bass === project.turnOf ? 'red' : 'black',
+              }}
+            >
+              Bass: {project.bass}
+            </Typography>
+            <Typography
+              sx={{
+                color: project.drums === project.turnOf ? 'red' : 'black',
+              }}
+            >
+              Drums: {project.drums}
+            </Typography>
+            <Typography
+              sx={{
+                color: project.guitar === project.turnOf ? 'red' : 'black',
+              }}
+            >
+              Guitar: {project.guitar}
+            </Typography>
+            <Typography
+              sx={{
+                color: project.keyboards === project.turnOf ? 'red' : 'black',
+              }}
+            >
+              Keyboards: {project.keyboards}
+            </Typography>
+            <Typography
+              sx={{
+                color: project.vocals === project.turnOf ? 'red' : 'black',
+              }}
+            >
+              Vocals: {project.vocals}
+            </Typography>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                marginLeft: '5vw',
+              }}
+            >
+              <Typography>Order: {project.order.join(' ')}</Typography>
+              <Typography>Current Round: {project.currentRound}</Typography>
+            </div>
             {myTurn ? 
               <>
                 <Typography>It is your turn!</Typography>
-                <Button onClick={() => takeTurn()}>Take Turn</Button>
+                <Button 
+                  onClick={() => takeTurn()}
+                  variant='contained'
+                >
+                  Take Turn
+                </Button>
               </>
             : 
               <Typography>You must wait for your turn.</Typography>

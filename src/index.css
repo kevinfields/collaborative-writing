@@ -30,3 +30,8 @@ code {
   width: 55vw;
   margin-right: 2.5vw;
 }
+
+
+.current-turn {
+  color: red;
+}

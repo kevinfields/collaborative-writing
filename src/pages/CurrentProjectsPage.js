@@ -27,6 +27,10 @@ const CurrentProjectsPage = (props) => {
     <div className='page'>
       <Button 
         onClick={() => props.goBack()}
+        variant='contained'
+        sx={{
+          margin: '1vh',
+        }}
       >
         Go Back
       </Button>

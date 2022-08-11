@@ -176,7 +176,15 @@ const NewProjectPage = (props) => {
 
   return (
     <div className='page'>
-      <Button onClick={() => props.goBack()}>Go Back</Button>
+      <Button 
+        onClick={() => props.goBack()}
+        variant='contained'
+        sx={{
+          margin: '1vh',
+        }}
+      >
+        Go Back
+      </Button>
       <Card
         style={{
           marginBottom: '5vh',

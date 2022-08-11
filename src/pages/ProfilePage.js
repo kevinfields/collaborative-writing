@@ -112,7 +112,15 @@ const ProfilePage = (props) => {
         <Loading />
       :
         <Card>
-          <Button onClick={() => props.goBack()}>Go Back</Button>
+          <Button 
+            onClick={() => props.goBack()}
+            variant='contained'
+            sx={{
+              margin: '1vh',
+            }}
+          >
+            Go Back
+          </Button>
           <CardHeader title={`Name: ${userData.name}`} />
           { nameChanger.open === false ?
           <CardContent>
@@ -130,6 +138,13 @@ const ProfilePage = (props) => {
             <Button onClick={() => closeNameChanger()}>Close</Button>
           </CardContent>
           }
+          <div
+            style={{
+              width: '30vw',
+              border: '1px solid red',
+              borderRadius: '5px',
+            }}
+          >
           <CardContent>
             Friends: {userData.friends.map(item => (
               <Typography>{item}</Typography>
@@ -145,6 +160,7 @@ const ProfilePage = (props) => {
               <Typography>{item}</Typography>
             ))}
           </CardContent>
+          </div>
           <CardContent
             sx={{
               display: 'flex',
@@ -155,6 +171,8 @@ const ProfilePage = (props) => {
               overflowY: 'scroll',
               float: 'right',
               marginTop: '-45vh',
+              border: '1px solid blue',
+              borderRadius: '5px',
             }}
           >
             <Typography

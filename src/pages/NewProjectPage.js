@@ -1,5 +1,5 @@
 import { Button, Card, MenuItem, Select, Typography } from '@mui/material';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useId} from 'react';
 import CREATE_PROJECT from '../reducers/CREATE_PROJECT';
 
 
@@ -23,6 +23,8 @@ const NewProjectPage = (props) => {
     keyboards: [],
     vocals: [],
   });
+
+  const projectID = useId();
 
   const [allowCreate, setAllowCreate] = useState(false);
 
@@ -118,18 +120,20 @@ const NewProjectPage = (props) => {
   const createNewProject = async () => {
 
     let teamIds = [];
+    let namesArr = [];
     let order = [];
 
     for (const instrument in members) {
       if (!teamIds.includes(members[instrument].id)) {
         teamIds.push(members[instrument].id);
-      }
+        namesArr.push(members[instrument].username);
+      };
     };
 
     if (teamIds.length > 5) {
-      order = teamIds;
+      order = namesArr;
     } else {
-      order = teamIds.concat(teamIds).concat(teamIds).slice(0, 6);
+      order = namesArr.concat(namesArr).concat(namesArr).slice(0, 6);
     }
 
 
@@ -145,7 +149,7 @@ const NewProjectPage = (props) => {
         order: order,
         currentRound: 0,
       },
-      id: 'test_project_' + (Math.floor(Math.random() * 99999999) + 1),
+      id: projectID,
     };
 
 

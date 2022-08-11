@@ -1,5 +1,6 @@
-import { Button, Card, MenuItem, Select, Typography } from '@mui/material';
+import { Button, Card, MenuItem, Select, TextField, Typography } from '@mui/material';
 import React, {useEffect, useState, useId} from 'react';
+import generateId from '../functions/generateId';
 import CREATE_PROJECT from '../reducers/CREATE_PROJECT';
 
 
@@ -24,7 +25,7 @@ const NewProjectPage = (props) => {
     vocals: [],
   });
 
-  const projectID = useId();
+  const [title, setTitle] = useState('');
 
   const [allowCreate, setAllowCreate] = useState(false);
 
@@ -119,6 +120,11 @@ const NewProjectPage = (props) => {
 
   const createNewProject = async () => {
 
+    if (title === '') {
+      alert('You must have a valid title');
+      return;
+    }
+
     let teamIds = [];
     let namesArr = [];
     let order = [];
@@ -133,7 +139,12 @@ const NewProjectPage = (props) => {
     if (teamIds.length > 5) {
       order = namesArr;
     } else {
-      order = namesArr.concat(namesArr).concat(namesArr).slice(0, 6);
+      order = namesArr.reverse();
+    }
+
+    if (!teamIds.includes(props.uid)) {
+      alert('You must play a role in this project!');
+      return;
     }
 
 
@@ -148,8 +159,9 @@ const NewProjectPage = (props) => {
         teamIds: teamIds,
         order: order,
         currentRound: 0,
+        title: title,
       },
-      id: projectID,
+      id: generateId(title, props.uid),
     };
 
 
@@ -174,6 +186,11 @@ const NewProjectPage = (props) => {
           <Typography>{item.id}</Typography>
         ))}
       </Card>
+      <Typography>Title: </Typography>
+      <TextField 
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
       <div className='select-flexbox'>
         <Typography>Choose a Bassist: </Typography>
         <Select 

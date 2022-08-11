@@ -30,6 +30,7 @@ function App() {
   const background = document.getElementsByTagName("html")[0];
   const [user] = useAuthState(auth);
   const [currentId, setCurrentId] = useState('-1');
+  const [username, setUsername] = useState('');
   const navigate = useNavigate();
 
   const loginUser = () => {
@@ -120,6 +121,7 @@ function App() {
           element={
             <CurrentProjectsPage
               userRef={firestore.collection('users').doc(user.uid)}
+              setUsername={(name) => setUsername(name)}
               currentProjectsRef={firestore.collection('currentProjects')}
               chooseProject={(id) => navigate(`/${user.uid}/current_projects/${id}`)}
               goBack={() => navigate('/')}
@@ -147,6 +149,7 @@ function App() {
               usersRef={firestore.collection('users')}
               currentProjectsRef={firestore.collection('currentProjects')}
               goBack={() => navigate('/')}
+              username={username}
             />
           }
         />

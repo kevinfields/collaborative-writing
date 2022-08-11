@@ -2,9 +2,11 @@ export default async function LOAD_PROJECTS(userRef, currentProjectsRef) {
 
 
   let projectList = [];
+  let username;
 
   await userRef.get().then(doc => {
     projectList = doc.data().currentProjectIds;
+    username = doc.data().username;
   });
 
 
@@ -18,5 +20,8 @@ export default async function LOAD_PROJECTS(userRef, currentProjectsRef) {
     })
   };
 
-  return projectObjects;
+    return {
+      username: username,
+      projects: projectObjects,
+    };
 }

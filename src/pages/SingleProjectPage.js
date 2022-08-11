@@ -2,43 +2,26 @@ import { Button, Card, CardContent, CardHeader, Typography } from '@mui/material
 import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 import Loading from '../components/Loading';
+import checkTurn from '../functions/checkTurn';
+import TAKE_TURN from '../reducers/TAKE_TURN';
 
 const SingleProjectPage = (props) => {
 
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState({});
   const [myTurn, setMyTurn] = useState(false);
-  const [username, setUsername] = useState('');
   const { projectID } = useParams();
 
   const loadProject = async () => {
-
-    const loadUser = async () => {
-      let user;
-      await props.userRef.get().then(doc => {
-        user = doc.data();
-      });
-      setUsername(user.username);
-      return username;
-    }
-
-    const checkTurn = (round, order, name) => {
-
-      console.log('round: ' + round);
-      console.log('order: ' + order);
-      console.log('name: ' + name);
-      
-      if (order[round % order.length] === name) {
-        setMyTurn(true);
-      }
-    }
-
-    const userNameTag = await loadUser();
-
+    
     let data;
     await props.currentProjectsRef.doc(projectID).get().then(doc => {
       data = doc.data();
-      checkTurn(data.currentRound, data.order, userNameTag);
+      if (checkTurn(data.currentRound, data.order, props.username)) {
+        setMyTurn(true);
+      } else {
+        setMyTurn(false);
+      }
     });
 
     setProject(data);
@@ -47,7 +30,18 @@ const SingleProjectPage = (props) => {
 
   useEffect(() => {
     loadProject();
-  }, [])
+  }, []);
+
+  const takeTurn = async () => {
+
+    if (props.username === '') {
+      return;
+    };
+
+    await TAKE_TURN(props.currentProjectsRef.doc(projectID), props.username).then(() => {
+      loadProject();
+    })
+  }
 
   return (
     <div className='page'>
@@ -56,12 +50,15 @@ const SingleProjectPage = (props) => {
         :
         <Card>
           <Button onClick={() => props.goBack()}>Go Back</Button>
-          <CardHeader title={project.id} />
+          <CardHeader title={projectID} />
           <CardContent
             sx={{
               display: 'flex',
               flexDirection: 'row',
               gap: '1vw',
+              flexWrap: 'wrap',
+              width: '60vw',
+              overflowY: 'scroll',
             }}
           >
             <Typography>Bass: {project.bass}</Typography>
@@ -69,8 +66,13 @@ const SingleProjectPage = (props) => {
             <Typography>Guitar: {project.guitar}</Typography>
             <Typography>Keyboards: {project.keyboards}</Typography>
             <Typography>Vocals: {project.vocals}</Typography>
+            <Typography>Order: {project.order.join(' ')}</Typography>
+            <Typography>Current Round: {project.currentRound}</Typography>
             {myTurn ? 
-              <Typography>It is your turn!</Typography>
+              <>
+                <Typography>It is your turn!</Typography>
+                <Button onClick={() => takeTurn()}>Take Turn</Button>
+              </>
             : 
               <Typography>You must wait for your turn.</Typography>
             }

@@ -117,6 +117,13 @@ const NewProjectPage = (props) => {
 
   }, [members]);
 
+  useEffect(() => {
+
+    if (title.length >= 40) {
+      setTitle(title.substring(0, 40));
+    }
+  }, [title])
+
 
   const createNewProject = async () => {
 
@@ -160,6 +167,7 @@ const NewProjectPage = (props) => {
         order: order,
         currentRound: 0,
         title: title,
+        turnOf: order[0],
       },
       id: generateId(title, props.uid),
     };

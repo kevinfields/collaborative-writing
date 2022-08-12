@@ -1,4 +1,4 @@
-import { Button, Card, CardContent, CardHeader, Typography } from '@mui/material';
+import { Button, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 import Loading from '../components/Loading';
@@ -70,77 +70,121 @@ const SingleProjectPage = (props) => {
           >
             Go Back
           </Button>
-          <CardHeader title={project.title} />
-          <CardContent
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: '1vw',
-              flexWrap: 'wrap',
-              width: '60vw',
-              overflowY: 'scroll',
-            }}
+          <Grid
+            container
+            spacing={1}
+            columns={16}
           >
-            <Typography>Project Id: {projectID}</Typography>
-            <Typography
-              sx={{
-                color: project.bass === project.turnOf ? 'red' : 'black',
-              }}
+            <Grid
+              item
+              xl={12}
+              lg={12}
+              md={12}
+              sm={12}
+              xs={12}
             >
-              Bass: {project.bass}
-            </Typography>
-            <Typography
-              sx={{
-                color: project.drums === project.turnOf ? 'red' : 'black',
-              }}
+              <CardHeader title={project.title} />
+            </Grid>
+            <Grid
+              item
+              xl={12}
+              lg={12}
+              md={12}
+              sm={12}
+              xs={12}
             >
-              Drums: {project.drums}
-            </Typography>
-            <Typography
+              <Typography>Project Id: {projectID}</Typography>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={12}
+              lg={12}
+              xl={12}
               sx={{
-                color: project.guitar === project.turnOf ? 'red' : 'black',
-              }}
-            >
-              Guitar: {project.guitar}
-            </Typography>
-            <Typography
-              sx={{
-                color: project.keyboards === project.turnOf ? 'red' : 'black',
-              }}
-            >
-              Keyboards: {project.keyboards}
-            </Typography>
-            <Typography
-              sx={{
-                color: project.vocals === project.turnOf ? 'red' : 'black',
-              }}
-            >
-              Vocals: {project.vocals}
-            </Typography>
-            <div
-              style={{
                 display: 'flex',
-                flexDirection: 'column',
-                marginLeft: '5vw',
+                flexDirection: 'row',
+                gap: '1vw',
               }}
             >
-              <Typography>Order: {project.order.join(' ')}</Typography>
-              <Typography>Current Round: {project.currentRound}</Typography>
-            </div>
-            {myTurn ? 
-              <>
-                <Typography>It is your turn!</Typography>
-                <Button 
-                  onClick={() => takeTurn()}
-                  variant='contained'
+              <Typography
+                sx={{
+                  color: project.bass === project.turnOf ? 'red' : 'black',
+                }}
+              >
+                Bass: {project.bass}
+              </Typography>
+              <Typography
+                sx={{
+                  color: project.drums === project.turnOf ? 'red' : 'black',
+                }}
+              >
+                Drums: {project.drums}
+              </Typography>
+              <Typography
+                sx={{
+                  color: project.guitar === project.turnOf ? 'red' : 'black',
+                }}
+              >
+                Guitar: {project.guitar}
+              </Typography>
+              <Typography
+                sx={{
+                  color: project.keyboards === project.turnOf ? 'red' : 'black',
+                }}
+              >
+                Keyboards: {project.keyboards}
+              </Typography>
+              <Typography
+                sx={{
+                  color: project.vocals === project.turnOf ? 'red' : 'black',
+                }}
+              >
+                Vocals: {project.vocals}
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={12}
+              lg={12}
+              xl={12}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  marginLeft: '2.5vw',
+                  width: '30vw',
+                }}
+              >
+                <Typography>Order: {project.order.join(' ')}</Typography>
+                <Typography>Current Round: {project.currentRound}</Typography>
+              </div>
+            </Grid>
+              {myTurn ? 
+                <Grid 
+                  item
+                  xs={12}
+                  sm={12}
+                  md={12}
+                  lg={12}
+                  xl={12}
                 >
-                  Take Turn
-                </Button>
-              </>
-            : 
-              <Typography>You must wait for your turn.</Typography>
-            }
-          </CardContent>
+                  <Typography>It is your turn!</Typography>
+                  <Button 
+                    onClick={() => takeTurn()}
+                    variant='contained'
+                  >
+                    Take Turn
+                  </Button>
+                </Grid>
+              : 
+                <Typography>You must wait for your turn.</Typography>
+              }
+          </Grid>
         </Card>
       }
     </div>

@@ -35,3 +35,13 @@ code {
 .current-turn {
   color: red;
 }
+
+.dugout {
+  color: white;
+}
+
+.order-array {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5vw;
+}

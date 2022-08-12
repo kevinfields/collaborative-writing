@@ -12,8 +12,8 @@ const CurrentProjectsPage = (props) => {
 
   const loadProjects = async () => {
     await LOAD_PROJECTS(props.userRef, props.currentProjectsRef).then(res => {
-
       setProjects(res.projects);
+      console.log(JSON.stringify(res.projects))
       props.setUsername(res.username);
       setLoading(false);
     })
@@ -45,7 +45,7 @@ const CurrentProjectsPage = (props) => {
               projectId={item.id}
               project={item}
               projectData={item.data}
-              projectTitle={item.data.title ? item.data.title : ''}
+              projectTitle={item.data ? item.data.title : ''}
               onSelect={() => props.chooseProject(item.id)}
             />
           ))

@@ -10,6 +10,12 @@ const SingleProjectPage = (props) => {
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState({});
   const [myTurn, setMyTurn] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [turnObject, setTurnObject] = useState({
+    barCount: -1,
+    barIndices: [0],
+    trackLink: '',
+  });
   const { projectID } = useParams();
 
   const loadProject = async () => {
@@ -35,7 +41,41 @@ const SingleProjectPage = (props) => {
   useEffect(() => {
 
     console.log('project.turnOf: ' + project.turnOf )
-  }, [project])
+  }, [project]);
+
+
+  useEffect(() => {
+
+    if (submitting) {
+
+      const linkName = prompt('Please provide a link');
+      const barLength = prompt('Please enter the number of bars this clip covers.');
+      const barArrayStart = prompt('Please enter the number of the first bar in the clip.');
+
+      let barArray = [Number(barArrayStart)];
+
+      for (let i=1; i<barLength; i++) {
+        barArray.push(Number(barArray[i-1]) + 1);
+      };
+
+      setTurnObject({
+        trackLink: linkName,
+        barCount: Number(barLength),
+        barIndices: barArray,
+      });
+    }
+
+  }, [submitting]);
+
+
+  useEffect(() => {
+
+    if (turnObject.barCount > 0 && turnObject.trackLink !== '') {
+      takeTurn();
+    }
+
+  }, [turnObject])
+
 
   const takeTurn = async () => {
 
@@ -43,10 +83,32 @@ const SingleProjectPage = (props) => {
       return;
     };
 
-    await TAKE_TURN(props.currentProjectsRef.doc(projectID), props.username).then(() => {
+    const instrumentsObject = {
+      bass: project.bass,
+      drums: project.drums,
+      guitar: project.guitar,
+      keyboards: project.keyboards,
+      vocals: project.vocals,
+    };
+
+    let instrumentChoices = [];
+
+    for (const instrument in instrumentsObject) {
+      if (instrumentsObject[instrument] === props.username) {
+        instrumentChoices.push(instrument);
+      };
+    };
+
+    const instrumentChoice = prompt('Pick a track type from this list ' + instrumentChoices.join(', '));
+    await TAKE_TURN(props.currentProjectsRef.doc(projectID), turnObject, instrumentChoice, props.username).then(() => {
+      setSubmitting(false);
       loadProject();
-    })
-  }
+    });
+
+  };
+
+  
+
 
   return (
     <div className='page'>
@@ -173,7 +235,7 @@ const SingleProjectPage = (props) => {
                 }}
               >
                 <Typography>Order: {project.order.join(' ')}</Typography>
-                <Typography>Current Round: {project.currentRound}</Typography>
+                <Typography>Current Round: {project.currentRound + 1}</Typography>
               </div>
             </Grid>
               {myTurn ? 
@@ -184,10 +246,14 @@ const SingleProjectPage = (props) => {
                   md={12}
                   lg={12}
                   xl={12}
+                  sx={{
+                    marginLeft: '2.5vw',
+                  }}
                 >
                   <Typography>It is your turn!</Typography>
+
                   <Button 
-                    onClick={() => takeTurn()}
+                    onClick={() => setSubmitting(true)}
                     variant='contained'
                   >
                     Take Turn

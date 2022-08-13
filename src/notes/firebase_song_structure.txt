@@ -1,0 +1,30 @@
+COLLECTION 'currentProjects'
+  - DOCUMENTS HAVE FIELDS:
+      -bass (string 'username')
+      -guitar (string 'username')
+      -keyboards (string 'username')
+      -vocals (string 'username')
+      -drums (string 'username')
+      -bassLength (number (bars))
+      -guitarLength (number (bars))
+      -keyboardsLength (number (bars))
+      -drumsLength (number (bars))
+      -vocalsLength (number (bars))
+      -barCount (number (total bars used))
+      -tempo (number (bpm))
+      -barLength (number (beats per bar))
+
+    - AND COLLECTIONS:
+
+      -bass
+      -guitar
+      -keyboards
+      -drums
+      -vocals
+      -totalStructure
+
+      -EACH OF WHICH HAS DOCUMENTS (randomIds)
+        -WITH FIELDS:
+          -trackLink (string (url))
+          -barCount (number (bars))
+          -barIndices (array [list of bar indices])

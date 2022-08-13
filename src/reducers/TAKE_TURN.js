@@ -1,6 +1,6 @@
 import checkTurn from "../functions/checkTurn";
 
-export default async function TAKE_TURN(projectRef, username) {
+export default async function TAKE_TURN(projectRef, turnObject, trackType, username) {
 
   let project;
   await projectRef.get().then(doc => {
@@ -31,6 +31,26 @@ export default async function TAKE_TURN(projectRef, username) {
   };
 
   await projectRef.set(projectData);
+
+  switch (trackType) {
+    case 'bass': 
+      await projectRef.collection('bass').add(turnObject);
+      break;
+    case 'guitar':
+      await projectRef.collection('guitar').add(turnObject);
+      break;
+    case 'keyboards':
+      await projectRef.collection('keyboards').add(turnObject);
+      break;
+    case 'drums':
+      await projectRef.collection('drums').add(turnObject);
+      break;
+    case 'vocals':
+      await projectRef.collection('vocals').add(turnObject);
+      break;
+    default:
+      break;
+  }
 
   return true;
 

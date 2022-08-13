@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 import Loading from '../components/Loading';
 import checkTurn from '../functions/checkTurn';
+import LOAD_PROJECT_LAYOUT from '../reducers/LOAD_PROJECT_LAYOUT';
 import TAKE_TURN from '../reducers/TAKE_TURN';
 
 const SingleProjectPage = (props) => {
@@ -16,6 +17,7 @@ const SingleProjectPage = (props) => {
     barIndices: [0],
     trackLink: '',
   });
+  const [projectLayout, setProjectLayout] = useState({});
   const { projectID } = useParams();
 
   const loadProject = async () => {
@@ -28,6 +30,10 @@ const SingleProjectPage = (props) => {
       } else {
         setMyTurn(false);
       }
+    });
+
+    await LOAD_PROJECT_LAYOUT(props.currentProjectsRef.doc(projectID)).then(res => {
+      setProjectLayout(res);
     });
 
     setProject(data);
@@ -119,7 +125,7 @@ const SingleProjectPage = (props) => {
           sx={{
             width: '95%',
             marginLeft: '2.5%',
-            height: '60%',
+            height: '70vh',
             border: '1px solid blue',
           }}
         >
@@ -275,6 +281,84 @@ const SingleProjectPage = (props) => {
                 </Grid>
               }
           </Grid>
+          {projectLayout !== {} ? 
+            <Grid
+              container
+              columns={16}
+              columnSpacing={0}
+              rowSpacing={2}
+              sx={{
+                marginTop: '5vh',
+                border: '1px solid black',
+                height: '50vh',
+                overflowY: 'scroll',
+              }}
+              direction={'column'}
+
+            >
+              <Typography>Bass: </Typography>
+              {projectLayout.bass.map(item => (
+                <Grid 
+                  item
+                  lg={item.barCount}
+                  sx={{
+                    border: '1px solid black',
+                  }}
+                >
+                  {item.trackLink}
+                </Grid>
+              ))}
+              <Typography>Drums: </Typography>
+              {projectLayout.drums.map(item => (
+                <Grid 
+                  item
+                  lg={item.barCount}
+                  sx={{
+                    border: '1px solid red',
+                  }}
+                >
+                  {item.trackLink}
+                </Grid>
+              ))}
+              <Typography>Guitar: </Typography>
+              {projectLayout.guitar.map(item => (
+                <Grid 
+                  item
+                  lg={item.barCount}
+                  sx={{
+                    border: '1px solid green',
+                  }}
+                >
+                  {item.trackLink}
+                </Grid>
+              ))}
+              <Typography>Keyboards: </Typography>
+              {projectLayout.keyboards.map(item => (
+                <Grid 
+                  item
+                  lg={item.barCount}
+                  sx={{
+                    border: '1px solid orange',
+                  }}
+                >
+                  {item.trackLink}
+                </Grid>
+              ))}
+              <Typography>Vocals: </Typography>
+              {projectLayout.vocals.map(item => (
+                <Grid 
+                  item
+                  lg={item.barCount}
+                  sx={{
+                    border: '1px solid purple',
+                  }}
+                >
+                  {item.trackLink}
+                </Grid>
+              ))}
+            </Grid>
+            : null
+          }
         </Card>
       }
     </div>

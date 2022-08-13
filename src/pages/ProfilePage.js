@@ -124,7 +124,7 @@ const ProfilePage = (props) => {
           <CardHeader title={`Name: ${userData.name}`} />
           { nameChanger.open === false ?
           <CardContent>
-            <Typography>Name: {userData.username}</Typography>
+            <Typography>Username: {userData.username}</Typography>
             <Button onClick={() => openNameChanger()}>Change Name</Button>
           </CardContent>
           :

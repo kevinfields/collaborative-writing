@@ -1,5 +1,6 @@
 import { Button, Card, MenuItem, Select, TextField, Typography } from '@mui/material';
 import React, {useEffect, useState, useId} from 'react';
+import { useNavigate } from 'react-router-dom';
 import generateId from '../functions/generateId';
 import CREATE_PROJECT from '../reducers/CREATE_PROJECT';
 
@@ -28,7 +29,7 @@ const NewProjectPage = (props) => {
   const [title, setTitle] = useState('');
 
   const [allowCreate, setAllowCreate] = useState(false);
-
+  const navigate = useNavigate();
 
   const loadAllFriends = async () => {
 
@@ -154,6 +155,7 @@ const NewProjectPage = (props) => {
       return;
     }
 
+    const generatedId = generateId(title, props.uid)
 
     const projectObject = {
 
@@ -169,7 +171,7 @@ const NewProjectPage = (props) => {
         title: title,
         turnOf: order[0],
       },
-      id: generateId(title, props.uid),
+      id: generatedId,
     };
 
 
@@ -180,6 +182,8 @@ const NewProjectPage = (props) => {
     }
 
     await CREATE_PROJECT(projectObject, props.currentProjectsRef, userRefs);
+    navigate(`/${props.uid}/current_projects/${generatedId}/`);
+    
   }
 
   return (

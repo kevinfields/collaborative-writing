@@ -83,7 +83,12 @@ const SingleProjectPage = (props) => {
               sm={12}
               xs={12}
             >
-              <CardHeader title={project.title} />
+              <CardHeader 
+                title={project.title}
+                sx={{
+                  marginLeft: '2.5vw',
+                }}
+              />
             </Grid>
             <Grid
               item
@@ -93,7 +98,13 @@ const SingleProjectPage = (props) => {
               sm={12}
               xs={12}
             >
-              <Typography>Project Id: {projectID}</Typography>
+              <Typography
+                sx={{
+                  marginLeft: '2.5vw',
+                }}
+              >
+                Project Id: {projectID}
+              </Typography>
             </Grid>
             <Grid
               item
@@ -103,6 +114,7 @@ const SingleProjectPage = (props) => {
               lg={12}
               xl={12}
               sx={{
+                marginLeft: '2.5vw',
                 display: 'flex',
                 flexDirection: 'row',
                 gap: '1vw',
@@ -182,7 +194,19 @@ const SingleProjectPage = (props) => {
                   </Button>
                 </Grid>
               : 
-                <Typography>You must wait for your turn.</Typography>
+                <Grid
+                  item
+                  xs={12}
+                  sm={12}
+                  md={12}
+                  lg={12}
+                  xl={12}
+                  sx={{
+                    marginLeft: '2.5vw',
+                  }}
+                >
+                  <Typography>You must wait for your turn.</Typography>
+                </Grid>
               }
           </Grid>
         </Card>

@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 import Loading from '../components/Loading';
 import ProjectDisplayMap from '../components/ProjectDisplayMap';
+import QuestionModal from '../components/QuestionModal';
 import checkTurn from '../functions/checkTurn';
 import LOAD_PROJECT_LAYOUT from '../reducers/LOAD_PROJECT_LAYOUT';
 import TAKE_TURN from '../reducers/TAKE_TURN';
@@ -12,11 +13,19 @@ const SingleProjectPage = (props) => {
   const [loading, setLoading] = useState(true);
   const [project, setProject] = useState({});
   const [myTurn, setMyTurn] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [myInstruments, setMyInstruments] = useState([]);
+  const [submitting, setSubmitting] = useState({
+    link: false,
+    barCount: false,
+    firstBar: false,
+    instrument: false,
+    final: false,
+  });
   const [turnObject, setTurnObject] = useState({
     barCount: -1,
     barIndices: [0],
     trackLink: '',
+    instrument: '',
   });
   const [projectLayout, setProjectLayout] = useState({});
   const { projectID } = useParams();
@@ -45,43 +54,70 @@ const SingleProjectPage = (props) => {
     loadProject();
   }, []);
 
+
   useEffect(() => {
 
-    console.log('project.turnOf: ' + project.turnOf )
+    console.log('project.turnOf: ' + project.turnOf );
+    let catcher = [];
+
+    if (project.turnOf === props.username) {
+      for (const instrument in project) {
+        if (instrument !== 'turnOf') {
+          if (project[instrument] === props.username){
+            catcher.push(instrument);
+          }
+        }
+      }
+      setMyInstruments(catcher);
+    };
   }, [project]);
 
-
   useEffect(() => {
 
-    if (submitting) {
-
-      const linkName = prompt('Please provide a link');
-      const barLength = prompt('Please enter the number of bars this clip covers.');
-      const barArrayStart = prompt('Please enter the number of the first bar in the clip.');
-
-      let barArray = [Number(barArrayStart)];
-
-      for (let i=1; i<barLength; i++) {
-        barArray.push(Number(barArray[i-1]) + 1);
-      };
-
+    if (!submitting.final && !submitting.barCount && !submitting.firstBar && !submitting.link && !submitting.instrument && turnObject.trackLink !== '') {
       setTurnObject({
-        trackLink: linkName,
-        barCount: Number(barLength),
-        barIndices: barArray,
+        barCount: -1,
+        barIndices: [0],
+        trackLink: '',
+        instrument: '',
       });
     }
+  }, [submitting])
 
-  }, [submitting]);
+
+  // useEffect(() => {
+
+  //   if (submitting) {
+
+  //     const linkName = prompt('Please provide a link');
+  //     const barLength = prompt('Please enter the number of bars this clip covers.');
+  //     const barArrayStart = prompt('Please enter the number of the first bar in the clip.');
+
+  //     let barArray = [Number(barArrayStart)];
+
+  //     for (let i=1; i<barLength; i++) {
+  //       barArray.push(Number(barArray[i-1]) + 1);
+  //     };
+
+     
+
+  //     setTurnObject({
+  //       trackLink: linkName,
+  //       barCount: Number(barLength),
+  //       barIndices: barArray,
+  //     });
+  //   }
+
+  // }, [submitting]);
 
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (turnObject.barCount > 0 && turnObject.trackLink !== '') {
-      takeTurn();
-    }
+  //   if (turnObject.barCount > 0 && turnObject.trackLink !== '') {
+  //     takeTurn();
+  //   }
 
-  }, [turnObject])
+  // }, [turnObject])
 
 
   const takeTurn = async () => {
@@ -106,14 +142,59 @@ const SingleProjectPage = (props) => {
       };
     };
 
-    const instrumentChoice = prompt('Pick a track type from this list ' + instrumentChoices.join(', '));
-    await TAKE_TURN(props.currentProjectsRef.doc(projectID), turnObject, instrumentChoice, props.username).then(() => {
-      setSubmitting(false);
+    
+    await TAKE_TURN(props.currentProjectsRef.doc(projectID), turnObject, turnObject.instrument, props.username).then(() => {
+      setSubmitting({
+        ...submitting,
+        final: false,
+      });
       loadProject();
     });
 
   };
 
+  const receiveResponse = (response, type) => {
+
+    switch (type) {
+      case 'link':
+        setTurnObject({
+          ...turnObject,
+          trackLink: response,
+        });
+        setSubmitting({...submitting, link: false, barCount: true})
+        break;
+      case 'count':
+        setTurnObject({
+          ...turnObject,
+          barCount: Number(response),
+        });
+        setSubmitting({...submitting, barCount: false, firstBar: true})
+        break;
+      case 'first':
+        let indicesCatcher = [];
+        for (let i=Number(response); i<Number(response) + Number(turnObject.barCount); i++) {
+          indicesCatcher.push(Number(i));
+        }
+        setTurnObject({
+          ...turnObject,
+          barIndices: indicesCatcher,
+        });
+        setSubmitting({...submitting, firstBar: false, instrument: true})
+        break;
+      case 'instrument':
+        setTurnObject({
+          ...turnObject,
+          instrument: response,
+        });
+        setSubmitting({...submitting, instrument: false, final: true})
+        break;
+      case 'final':
+        takeTurn();
+        break;
+      default:
+        break;
+    }
+  }
   
 
 
@@ -139,6 +220,50 @@ const SingleProjectPage = (props) => {
           >
             Go Back
           </Button>
+          {
+            submitting.link ?
+            <QuestionModal
+              open={submitting.link}
+              onClose={() => setSubmitting({...submitting, link: false})}
+              header={'Track Link'}
+              description={'Please provide a track link url.'}
+              onRespondText={(link) => receiveResponse(link, 'link')}
+            />
+            : submitting.barCount ?
+            <QuestionModal
+              open={submitting.barCount}
+              onClose={() => setSubmitting({...submitting, barCount: false})}
+              header={'Bar Count'}
+              description={'Please enter the number of bars your clip covers.'}
+              onRespondNumerical={(count) => receiveResponse(count, 'count')}
+            />
+            : submitting.firstBar ?
+            <QuestionModal
+              open={submitting.firstBar}
+              onClose={() => setSubmitting({...submitting, firstBar: false})}
+              header={'First Bar'}
+              description={'Please enter the index of the first bar covered in your clip'}
+              onRespondNumerical={(first) => receiveResponse(first, 'first')}
+            />
+            : submitting.instrument ?
+            <QuestionModal
+              open={submitting.instrument}
+              onClose={() => setSubmitting({...submitting, instrument: false})}
+              header={'Instrument'}
+              description={'Please pick the instrument used in this track.'}
+              onRespondOptions={(instrument) => receiveResponse(instrument, 'instrument')}
+              options={myInstruments}
+            />
+            : submitting.final ?
+            <QuestionModal
+              open={submitting.final}
+              onClose={() => setSubmitting({...submitting, final: false})}
+              header={'Are you sure?'}
+              description={'Are you sure you want to submit this clip, with this information?'}
+              onAccept={() => receiveResponse(true, 'final')}
+            />
+            : null
+          }
           <Grid
             container
             spacing={1}
@@ -275,7 +400,7 @@ const SingleProjectPage = (props) => {
                   <Typography>It is your turn!</Typography>
 
                   <Button 
-                    onClick={() => setSubmitting(true)}
+                    onClick={() => setSubmitting({...submitting, link: true})}
                     variant='contained'
                   >
                     Take Turn

@@ -19,47 +19,50 @@ const NewProjectDisplay = (props) => {
   return (
     <Card>
       <CardHeader title={'Create a New Project'} />
-      <TextField
-        type='select'
-        value={details.bass}
-        onChange={(e) => setDetails({...details, bass: e.target.value})}
+      <div
       >
-        {props.bassMembers.map(member => (
-          <MenuItem value={member} />
-        ))}
-      </TextField>
-      <Select
-        value={details.drums}
-        onChange={(e) => setDetails({...details, drums: e.target.value})}
-      >
-        {props.drumsMembers.map(member => (
-          <MenuItem value={member} />
-        ))}
-      </Select>
-      <Select
-        value={details.guitar}
-        onChange={(e) => setDetails({...details, guitar: e.target.value})}
-      >
-        {props.guitarMembers.map(member => (
-          <MenuItem value={member} />
-        ))}
-      </Select>
-      <Select
-        value={details.keyboards}
-        onChange={(e) => setDetails({...details, keyboards: e.target.value})}
-      >
-        {props.keyboardsMembers.map(member => (
-          <MenuItem value={member} />
-        ))}
-      </Select>
-      <Select
-        value={details.vocals}
-        onChange={(e) => setDetails({...details, vocals: e.target.value})}
-      >
-        {props.vocalsMembers.map(member => (
-          <MenuItem value={member} />
-        ))}
-      </Select>
+        <TextField
+          type='select'
+          value={details.bass}
+          onChange={(e) => setDetails({...details, bass: e.target.value})}
+        >
+          {props.bassMembers.map(member => (
+            <MenuItem value={member} />
+          ))}
+        </TextField>
+        <Select
+          value={details.drums}
+          onChange={(e) => setDetails({...details, drums: e.target.value})}
+        >
+          {props.drumsMembers.map(member => (
+            <MenuItem value={member} />
+          ))}
+        </Select>
+        <Select
+          value={details.guitar}
+          onChange={(e) => setDetails({...details, guitar: e.target.value})}
+        >
+          {props.guitarMembers.map(member => (
+            <MenuItem value={member} />
+          ))}
+        </Select>
+        <Select
+          value={details.keyboards}
+          onChange={(e) => setDetails({...details, keyboards: e.target.value})}
+        >
+          {props.keyboardsMembers.map(member => (
+            <MenuItem value={member} />
+          ))}
+        </Select>
+        <Select
+          value={details.vocals}
+          onChange={(e) => setDetails({...details, vocals: e.target.value})}
+        >
+          {props.vocalsMembers.map(member => (
+            <MenuItem value={member} />
+          ))}
+        </Select>
+      </div>
     </Card>
   )
 }

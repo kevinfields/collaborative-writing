@@ -16,6 +16,7 @@ const NewProjectPage = (props) => {
     vocals: '',
   });
 
+  const [creator, setCreator] = useState({});
   const [allFriends, setAllFriends] = useState([]);
 
   const [roleLists, setRoleLists] = useState({
@@ -47,12 +48,21 @@ const NewProjectPage = (props) => {
           id: user,
           data:  doc.data(),
         });
+
+        if (user === props.uid) {
+          setCreator(doc.data().username);
+        };
       });
     }
 
     setAllFriends([...friendObjects]);
     return true;
   };
+
+  const getIdFromUsername = (username) => {
+    const friend = allFriends.find(friend => friend.data.username === username);
+    return friend.id;
+  }
 
   useEffect(() => {
     loadAllFriends();
@@ -123,7 +133,8 @@ const NewProjectPage = (props) => {
     if (title.length >= 40) {
       setTitle(title.substring(0, 40));
     }
-  }, [title])
+  }, [title]);
+
 
 
   const createNewProject = async () => {
@@ -170,6 +181,8 @@ const NewProjectPage = (props) => {
         currentRound: 0,
         title: title,
         turnOf: order[0],
+        creatorId: props.uid,
+        creatorName: creator,
       },
       id: generatedId,
     };
@@ -212,51 +225,67 @@ const NewProjectPage = (props) => {
         onChange={(e) => setTitle(e.target.value)}
       />
       <div className='select-flexbox'>
+        <div className='select-flexbox-item'>
         <Typography>Choose a Bassist: </Typography>
-        <Select 
+        <TextField
+          select
           value={members.bass.username}
-          onChange={(e) => setMembers({...members, bass: e.target.value})}
+          onChange={(e) => setMembers({...members, bass: {username: e.target.value, id: getIdFromUsername(e.target.value)}})}
+          className='select-flexbox-bar'
         >
           {roleLists.bass.map(item => (
-            <MenuItem value={{id: item.id, username: item.username}}>{item.username}</MenuItem>
+            <MenuItem value={item.username}>{item.username}</MenuItem>
           ))}
-        </Select>
+        </TextField>
+        </div>
+        <div className='select-flexbox-item'>
         <Typography>Choose a Drummer: </Typography>
         <Select 
           value={members.drums.username}
-          onChange={(e) => setMembers({...members, drums: e.target.value})}
+          onChange={(e) => setMembers({...members, drums: {username: e.target.value, id: getIdFromUsername(e.target.value)}})}
+          className='select-flexbox-bar'
         >
           {roleLists.drums.map(item => (
-            <MenuItem value={{id: item.id, username: item.username}}>{item.username}</MenuItem>
+            <MenuItem value={item.username}>{item.username}</MenuItem>
           ))}
         </Select>
+        </div>
+        <div className='select-flexbox-item'>
         <Typography>Choose a Guitarist: </Typography>
         <Select 
           value={members.guitar.username}
-          onChange={(e) => setMembers({...members, guitar: e.target.value})}
+          onChange={(e) => setMembers({...members, guitar: {username: e.target.value, id: getIdFromUsername(e.target.value)}})}
+          className='select-flexbox-bar'
         >
           {roleLists.guitar.map(item => (
-            <MenuItem value={{id: item.id, username: item.username}}>{item.username}</MenuItem>
+            <MenuItem value={item.username}>{item.username}</MenuItem>
           ))}
         </Select>
+        </div>
+        <div className='select-flexbox-item'>
         <Typography>Choose a Keyboardist: </Typography>
         <Select 
           value={members.keyboards.username}
-          onChange={(e) => setMembers({...members, keyboards: e.target.value})}
+          onChange={(e) => setMembers({...members, keyboards: {username: e.target.value, id: getIdFromUsername(e.target.value)}})}
+          className='select-flexbox-bar'
         >
           {roleLists.keyboards.map(item => (
-            <MenuItem value={{id: item.id, username: item.username}}>{item.username}</MenuItem>
+            <MenuItem value={item.username}>{item.username}</MenuItem>
           ))}
         </Select>
+        </div>
+        <div className='select-flexbox-item'>
         <Typography>Choose a Vocalist: </Typography>
         <Select 
           value={members.vocals.username}
-          onChange={(e) => setMembers({...members, vocals: e.target.value})}
+          onChange={(e) => setMembers({...members, vocals: {username: e.target.value, id: getIdFromUsername(e.target.value)}})}
+          className='select-flexbox-bar'
         >
           {roleLists.vocals.map(item => (
-            <MenuItem value={{id: item.id, username: item.username}}>{item.username}</MenuItem>
+            <MenuItem value={item.username}>{item.username}</MenuItem>
           ))}
         </Select>
+        </div>
       </div>
       <Card
         style={{

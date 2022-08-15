@@ -2,6 +2,7 @@ import { Button, Card, CardContent, CardHeader, Grid, Typography } from '@mui/ma
 import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom';
 import Loading from '../components/Loading';
+import ProjectDisplayMap from '../components/ProjectDisplayMap';
 import checkTurn from '../functions/checkTurn';
 import LOAD_PROJECT_LAYOUT from '../reducers/LOAD_PROJECT_LAYOUT';
 import TAKE_TURN from '../reducers/TAKE_TURN';
@@ -240,7 +241,22 @@ const SingleProjectPage = (props) => {
                   width: '30vw',
                 }}
               >
-                <Typography>Order: {project.order.join(' ')}</Typography>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '0.5vw',
+                  }}
+                >
+                  <Typography>Order: </Typography>
+                  {project.order.map(item => (
+                    <Typography
+                      className={item === project.turnOf ? 'current-turn' : null}
+                    >
+                      {item}
+                    </Typography>
+                  ))}
+                </div>
                 <Typography>Current Round: {project.currentRound + 1}</Typography>
               </div>
             </Grid>
@@ -282,81 +298,13 @@ const SingleProjectPage = (props) => {
               }
           </Grid>
           {projectLayout !== {} ? 
-            <Grid
-              container
-              columns={16}
-              columnSpacing={0}
-              rowSpacing={2}
-              sx={{
-                marginTop: '5vh',
-                border: '1px solid black',
-                height: '50vh',
-                overflowY: 'scroll',
-              }}
-              direction={'column'}
-
-            >
-              <Typography>Bass: </Typography>
-              {projectLayout.bass.map(item => (
-                <Grid 
-                  item
-                  lg={item.barCount}
-                  sx={{
-                    border: '1px solid black',
-                  }}
-                >
-                  {item.trackLink}
-                </Grid>
-              ))}
-              <Typography>Drums: </Typography>
-              {projectLayout.drums.map(item => (
-                <Grid 
-                  item
-                  lg={item.barCount}
-                  sx={{
-                    border: '1px solid red',
-                  }}
-                >
-                  {item.trackLink}
-                </Grid>
-              ))}
-              <Typography>Guitar: </Typography>
-              {projectLayout.guitar.map(item => (
-                <Grid 
-                  item
-                  lg={item.barCount}
-                  sx={{
-                    border: '1px solid green',
-                  }}
-                >
-                  {item.trackLink}
-                </Grid>
-              ))}
-              <Typography>Keyboards: </Typography>
-              {projectLayout.keyboards.map(item => (
-                <Grid 
-                  item
-                  lg={item.barCount}
-                  sx={{
-                    border: '1px solid orange',
-                  }}
-                >
-                  {item.trackLink}
-                </Grid>
-              ))}
-              <Typography>Vocals: </Typography>
-              {projectLayout.vocals.map(item => (
-                <Grid 
-                  item
-                  lg={item.barCount}
-                  sx={{
-                    border: '1px solid purple',
-                  }}
-                >
-                  {item.trackLink}
-                </Grid>
-              ))}
-            </Grid>
+            <ProjectDisplayMap
+              bass={projectLayout.bass}
+              drums={projectLayout.drums}
+              guitar={projectLayout.guitar}
+              keyboards={projectLayout.keyboards}
+              vocals={projectLayout.vocals}
+            />
             : null
           }
         </Card>

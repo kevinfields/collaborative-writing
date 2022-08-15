@@ -26,9 +26,18 @@ code {
 .select-flexbox {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  gap: 5vw;
   width: 55vw;
   margin-right: 2.5vw;
+}
+
+.select-flexbox-item {
+  width: 7vw;
+}
+
+.select-flexbox-bar {
+  width: 7vw;
 }
 
 
@@ -45,3 +54,28 @@ code {
   flex-direction: row;
   gap: 0.5vw;
 }
+
+
+.bass-track {
+  border: blue;
+  background-color: lightblue;
+};
+
+.drum-track {
+  background-color: green;
+};
+
+.guitar-track {
+  border: orange;
+  background-color: tan;
+};
+
+.keyboard-track {
+  border: green;
+  background-color: lightgreen;
+}
+
+.vocal-track {
+  background-color: rgb(252, 96, 252)
+}
+

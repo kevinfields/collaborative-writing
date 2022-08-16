@@ -1,5 +1,6 @@
 import { Button, Card, CardContent, Typography } from '@mui/material';
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
 import ACCEPT_FRIEND_REQUEST from '../reducers/ACCEPT_FRIEND_REQUEST';
 import DECLINE_FRIEND_REQUEST from '../reducers/DECLINE_FRIEND_REQUEST';
@@ -15,6 +16,7 @@ const AllUsersPage = (props) => {
   const [receivedRequests, setReceivedRequests] = useState([]);
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const reloadUserData = async () => {
     await props.userRef.get().then(doc => {
@@ -125,6 +127,10 @@ const AllUsersPage = (props) => {
                 </>
               :
                 <Button onClick={() => sendRequest(user.id)}>Add Friend</Button>
+              }
+              { props.uid !== user.id ?
+                <Button onClick={() => navigate(`/users/${user.id}`)}>View Profile</Button>
+              : null
               }
             </CardContent>
           ))}

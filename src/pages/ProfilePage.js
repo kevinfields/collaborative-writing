@@ -125,7 +125,12 @@ const ProfilePage = (props) => {
           { nameChanger.open === false ?
           <CardContent>
             <Typography>Username: {userData.username}</Typography>
-            <Button onClick={() => openNameChanger()}>Change Name</Button>
+            <Button 
+              onClick={() => openNameChanger()}
+              variant='outlined'
+            >
+              Change Name
+            </Button>
           </CardContent>
           :
           <CardContent>
@@ -228,7 +233,12 @@ const ProfilePage = (props) => {
                 marginRight: '10.5vw',
               }}
             />
-            <Button onClick={() => saveInstrumentChanges()}>Save Changes</Button>
+            <Button 
+              onClick={() => saveInstrumentChanges()}
+              variant='outlined'
+            >
+              Save Changes
+            </Button>
           </CardContent>
         </Card>
       }

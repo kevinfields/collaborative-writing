@@ -80,3 +80,7 @@ code {
   background-color: rgb(252, 96, 252)
 }
 
+.profile-data-section {
+  margin: 1vw;
+  border: 1px solid blue;
+}

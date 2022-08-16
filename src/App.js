@@ -12,6 +12,7 @@ import AllUsersPage from './pages/AllUsersPage';
 import CurrentProjectsPage from './pages/CurrentProjectsPage';
 import NewProjectPage from './pages/NewProjectPage';
 import SingleProjectPage from './pages/SingleProjectPage';
+import OtherProfilePage from './pages/OtherProfilePage';
 
 
 function App() {
@@ -113,7 +114,7 @@ function App() {
               firestore={firestore}
               user={user}
               goBack={() => navigate('/')}
-              openProfile={() => navigate(`/:${user.uid}/profile`)}
+              openProfile={() => navigate(`/${user.uid}/my_profile`)}
             />
           }
         />
@@ -151,6 +152,16 @@ function App() {
               currentProjectsRef={firestore.collection('currentProjects')}
               goBack={() => navigate('/')}
               username={username}
+            />
+          }
+        />
+        <Route
+          path={'/users/:userID'}
+          element={
+            <OtherProfilePage
+              usersRef={firestore.collection('users')}
+              userRef={firestore.collection('users').doc(user.uid)}
+              currentProjectsRef={firestore.collection('currentProjects')}
             />
           }
         />

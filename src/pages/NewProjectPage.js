@@ -210,17 +210,17 @@ const NewProjectPage = (props) => {
       >
         Go Back
       </Button>
-      <Card
-        style={{
-          marginBottom: '5vh',
+      <Typography
+        sx={{
+          marginLeft: '2.5vw',
         }}
       >
-        {allFriends.map(item => (
-          <Typography>{item.id}</Typography>
-        ))}
-      </Card>
-      <Typography>Title: </Typography>
+        Title: 
+      </Typography>
       <TextField 
+        sx={{
+          marginLeft: '2.5vw',
+        }}
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
@@ -290,6 +290,9 @@ const NewProjectPage = (props) => {
       <Card
         style={{
           marginTop: '5vh',
+          padding: '2vh',
+          width: '75%',
+          marginLeft: '12.5%',
         }}
       >
         <Typography>Bass: {members.bass.username}</Typography>

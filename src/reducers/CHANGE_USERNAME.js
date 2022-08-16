@@ -1,4 +1,14 @@
-export default async function CHANGE_USERNAME(userRef, takenNamesRef, newName) {
+/* THINGS THAT SHOULD CHANGE
+
+  - name in user object
+  - name in all projects
+  - name in all projects order lists
+  - name in all projects instruments assignments
+  - name in all projects with user as creator in creatorName
+
+*/
+
+export default async function CHANGE_USERNAME(userRef, takenNamesRef, newName, projectsRef) {
 
 
   let nameList = [];
@@ -25,12 +35,34 @@ export default async function CHANGE_USERNAME(userRef, takenNamesRef, newName) {
     names: nameList,
   });
 
-  
-
   await userRef.set({
     ...data,
     username: newName,
   });
+
+  const projectIds = [...data.currentProjectIds];
+
+  for (const project of projectIds) {
+
+    let data;
+    await projectsRef.doc(project).get().then(doc => {
+      data = doc.data();
+    });
+
+    for (const property in data) {
+
+      if (property === 'title') {
+        continue;
+      }
+      if (data[property] === oldName) {
+        data[property] = newName
+      };
+    };
+
+    let orderIndex = data.order.indexOf(oldName);
+    data.order[orderIndex] = newName;
+    await projectsRef.doc(project).set(data);
+  }
 
   return true;
 

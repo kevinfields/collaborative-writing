@@ -61,7 +61,7 @@ const ProfilePage = (props) => {
   };
 
   const saveNameChange = async () => {
-    await CHANGE_USERNAME(props.userRef, props.takenNamesRef, nameChanger.newName).then(res => {
+    await CHANGE_USERNAME(props.userRef, props.takenNamesRef, nameChanger.newName, props.currentProjectsRef).then(res => {
       if (!res) {
         alert('That name is already taken.');
       } else {
@@ -143,6 +143,7 @@ const ProfilePage = (props) => {
               width: '30vw',
               border: '1px solid red',
               borderRadius: '5px',
+              overflowX: 'scroll',
             }}
           >
           <CardContent>

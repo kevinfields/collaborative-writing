@@ -99,6 +99,7 @@ function App() {
               userRef={firestore.collection('users').doc(user.uid)}
               takenNamesRef={firestore.collection('taken_usernames').doc('list')}
               goBack={() => navigate('/')}
+              currentProjectsRef={firestore.collection('currentProjects')}
             />
           }
         />

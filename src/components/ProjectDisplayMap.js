@@ -2,6 +2,15 @@ import { Grid, Typography } from '@mui/material'
 import React from 'react'
 
 const ProjectDisplayMap = (props) => {
+
+  const countLength = (items) => {
+    let counter = 0;
+    items.forEach(item => {
+      counter += Number(item.barCount);
+    });
+    return counter;
+  };
+
   return (
     <div>
       <Grid
@@ -26,14 +35,22 @@ const ProjectDisplayMap = (props) => {
             marginLeft: '2.5vw',
           }}
         >
-          <Typography
-            sx={{
+          <div
+            style={{
               width: '5vw',
+              height: '4vh',
               border: '1px solid darkblue',
             }}
           >
             Bass: 
-          </Typography>
+            <Typography
+              sx={{
+                fontSize: '6pt',
+              }}
+            >
+              {countLength(props.bass)} bars
+            </Typography>
+          </div>
           {props.bass.map(item => (
             <div 
               style={{
@@ -59,14 +76,22 @@ const ProjectDisplayMap = (props) => {
             marginLeft: '2.5vw',
           }}
         >
-          <Typography
-            sx={{
+          <div
+            style={{
               width: '5vw',
+              height: '4vh',
               border: '1px solid darkblue',
             }}
           >
             Drums: 
-          </Typography>
+            <Typography
+              sx={{
+                fontSize: '6pt',
+              }}
+            >
+              {countLength(props.drums)} bars
+            </Typography>
+          </div>
           {props.drums.map(item => (
             <div 
               style={{
@@ -92,14 +117,22 @@ const ProjectDisplayMap = (props) => {
             marginLeft: '2.5vw',
           }}
         >
-          <Typography
-            sx={{
+          <div
+            style={{
               width: '5vw',
+              height: '4vh',
               border: '1px solid darkblue',
             }}
           >
             Guitar: 
-          </Typography>
+            <Typography
+              sx={{
+                fontSize: '6pt',
+              }}
+            >
+              {countLength(props.guitar)} bars
+            </Typography>
+          </div>
           {props.guitar.map(item => (
             <div 
               style={{
@@ -125,15 +158,23 @@ const ProjectDisplayMap = (props) => {
             marginLeft: '2.5vw',
           }}
         >
-          <Typography
-            sx={{
+          <div
+            style={{
               width: '5vw',
+              height: '4vh',
               border: '1px solid darkblue',
-              fontSize: '11pt',
+              fontSize: '10pt',
             }}
           >
             Keyboard: 
-          </Typography>
+            <Typography
+              sx={{
+                fontSize: '6pt',
+              }}
+            >
+              {countLength(props.keyboards)} bars
+            </Typography>
+          </div>
           {props.keyboards.map(item => (
             <div 
               style={{
@@ -159,14 +200,22 @@ const ProjectDisplayMap = (props) => {
             marginLeft: '2.5vw',
           }}
         >
-          <Typography
-            sx={{
+          <div
+            style={{
               width: '5vw',
+              height: '4vh',
               border: '1px solid darkblue',
             }}
           >
             Vocals: 
-          </Typography>
+            <Typography
+              sx={{
+                fontSize: '6pt',
+              }}
+            >
+              {countLength(props.vocals)} bars
+            </Typography>
+          </div>
           {props.vocals.map(item => (
             <div 
               style={{

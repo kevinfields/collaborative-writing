@@ -20,6 +20,7 @@ const SingleProjectPage = (props) => {
     firstBar: false,
     instrument: false,
     final: false,
+    date: null,
   });
   const [turnObject, setTurnObject] = useState({
     barCount: -1,
@@ -83,42 +84,6 @@ const SingleProjectPage = (props) => {
       });
     }
   }, [submitting])
-
-
-  // useEffect(() => {
-
-  //   if (submitting) {
-
-  //     const linkName = prompt('Please provide a link');
-  //     const barLength = prompt('Please enter the number of bars this clip covers.');
-  //     const barArrayStart = prompt('Please enter the number of the first bar in the clip.');
-
-  //     let barArray = [Number(barArrayStart)];
-
-  //     for (let i=1; i<barLength; i++) {
-  //       barArray.push(Number(barArray[i-1]) + 1);
-  //     };
-
-     
-
-  //     setTurnObject({
-  //       trackLink: linkName,
-  //       barCount: Number(barLength),
-  //       barIndices: barArray,
-  //     });
-  //   }
-
-  // }, [submitting]);
-
-
-  // useEffect(() => {
-
-  //   if (turnObject.barCount > 0 && turnObject.trackLink !== '') {
-  //     takeTurn();
-  //   }
-
-  // }, [turnObject])
-
 
   const takeTurn = async () => {
 
@@ -185,6 +150,7 @@ const SingleProjectPage = (props) => {
         setTurnObject({
           ...turnObject,
           instrument: response,
+          date: new Date(),
         });
         setSubmitting({...submitting, instrument: false, final: true})
         break;
@@ -207,7 +173,7 @@ const SingleProjectPage = (props) => {
           sx={{
             width: '95%',
             marginLeft: '2.5%',
-            height: '70vh',
+            height: '75vh',
             border: '1px solid blue',
           }}
         >

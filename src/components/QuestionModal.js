@@ -1,5 +1,5 @@
 import { Box, Button, Modal, TextField, Typography } from '@mui/material'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 const QuestionModal = (props) => {
 
@@ -16,7 +16,7 @@ const QuestionModal = (props) => {
   };
 
   const [responseValue, setResponseValue] = useState(props.onAccept ? false : props.onRespondNumerical ? 0 : props.onRespondText ? '' : false);
-
+  
   
   return (
     <Modal

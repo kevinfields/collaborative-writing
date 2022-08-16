@@ -1,7 +1,5 @@
 export default async function CREATE_PROJECT(projectData, currentProjectsRef, userRefs) {
 
-  
-
   for (const userRef of userRefs) {
     let data;
 
@@ -16,8 +14,12 @@ export default async function CREATE_PROJECT(projectData, currentProjectsRef, us
     });
   }
 
+  const date = new Date();
   await currentProjectsRef.doc(projectData.id).set({
     ...projectData.data,
+    turnObjects: [],
+    date: date,
+    lastUpdated: date,
   });
   
 }

@@ -17,6 +17,8 @@ export default async function TAKE_TURN(projectRef, turnObject, trackType, usern
 
   project.data.currentRound++;
 
+  project.data.turnObjects.push()
+
   let nextIndex;
   
   if (project.data.order[project.data.order.length - 1] === username) {
@@ -25,32 +27,49 @@ export default async function TAKE_TURN(projectRef, turnObject, trackType, usern
     nextIndex = project.data.order.indexOf(username) + 1;
   };
 
-  const projectData = {
+  let projectData = {
     ...project.data,
-    turnOf: project.data.order[nextIndex],
+    turnOf: project.data.order[nextIndex], 
+    lastUpdated: new Date(),
   };
 
-  await projectRef.set(projectData);
+  
+
+  let trackId = '';
 
   switch (trackType) {
     case 'bass': 
-      await projectRef.collection('bass').add(turnObject);
+      await projectRef.collection('bass').add(turnObject).then((res => {
+        trackId = res.id;
+      }));
       break;
     case 'guitar':
-      await projectRef.collection('guitar').add(turnObject);
+      await projectRef.collection('guitar').add(turnObject).then((res => {
+        trackId = res.id;
+      }));
       break;
     case 'keyboards':
-      await projectRef.collection('keyboards').add(turnObject);
+      await projectRef.collection('keyboards').add(turnObject).then((res => {
+        trackId = res.id;
+      }));
       break;
     case 'drums':
-      await projectRef.collection('drums').add(turnObject);
+      await projectRef.collection('drums').add(turnObject).then((res => {
+        trackId = res.id;
+      }));
       break;
     case 'vocals':
-      await projectRef.collection('vocals').add(turnObject);
+      await projectRef.collection('vocals').add(turnObject).then((res => {
+        trackId = res.id;
+      }));
       break;
     default:
       break;
   }
+
+
+  projectData.turnObjects.push({instrument: trackType, trackId: trackId});
+  await projectRef.set(projectData);
 
   return true;
 

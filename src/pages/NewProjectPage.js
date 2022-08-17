@@ -220,6 +220,7 @@ const NewProjectPage = (props) => {
       <TextField 
         sx={{
           marginLeft: '2.5vw',
+          marginBottom: '2.5vh',
         }}
         value={title}
         onChange={(e) => setTitle(e.target.value)}
@@ -303,7 +304,34 @@ const NewProjectPage = (props) => {
       </Card>
       {
       allowCreate ? 
-        <Button onClick={() => createNewProject()}>Create</Button>
+        <>
+          <Button 
+            onClick={() => createNewProject()}
+            variant='contained'
+            color='primary'
+            sx={{
+              position: 'fixed',
+              top: '75vh',
+              left: '30vw',
+              width: '15vw',
+            }}
+          >
+            Create New Project
+          </Button>
+          <Button 
+            onClick={() => createNewProject()}
+            variant='contained'
+            color='secondary'
+            sx={{
+              position: 'fixed',
+              top: '75vh',
+              right: '30vw',
+              width: '15vw',
+            }}
+          >
+            Edit Project Details
+          </Button>
+        </>
       : null
       }
     </div>

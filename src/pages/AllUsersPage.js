@@ -108,28 +108,73 @@ const AllUsersPage = (props) => {
           </Button>
           {users.map(user => (
             <CardContent>
-              <Typography>Name: {user.name} {"("}{user.id}{")"}</Typography>
+              <Typography>Name: {user.name} {"(id: "}{user.id}{")"}</Typography>
               <div className='user-instrument-list'>
                 Instruments: {user.instruments.map(item => (
                   <Typography>{item}</Typography>
                 ))}
               </div>
               { props.uid === user.id ?
-                <Button onClick={() => props.openProfile()}>Open My Profile</Button>
+                <Button 
+                  onClick={() => props.openProfile()}
+                  variant='contained'
+                  color='secondary'
+                >
+                  Open My Profile
+                </Button>
               : friends.includes(user.id) ?
-                <Button onClick={() => removeFriend(user.id)}>Remove Friend</Button>
+                <Button 
+                  onClick={() => removeFriend(user.id)}
+                  variant='contained'
+                  color='error'
+                >
+                  Remove Friend
+                </Button>
               : sentRequests.includes(user.id) ?
-                <Button onClick={() => removeFriendRequest(user.id)}>Undo Request</Button>
+                <Button 
+                  onClick={() => removeFriendRequest(user.id)}
+                  variant='contained'
+                  color='error'
+                >
+                  Undo Request
+                </Button>
               : receivedRequests.includes(user.id) ?
                 <>
-                  <Button onClick={() => acceptRequest(user.id)}>Accept Request</Button>
-                  <Button onClick={() => declineRequest(user.id)}>Decline Request</Button>
+                  <Button 
+                    onClick={() => acceptRequest(user.id)}
+                    variant='contained'
+                    color='success'
+                  >
+                    Accept Request
+                  </Button>
+                  <Button 
+                    onClick={() => declineRequest(user.id)}
+                    variant='contained'
+                    color='error'
+                  >
+                    Decline Request
+                  </Button>
                 </>
               :
-                <Button onClick={() => sendRequest(user.id)}>Add Friend</Button>
+                <Button 
+                  onClick={() => sendRequest(user.id)}
+                  variant='contained'
+                  color='success'
+                >
+                  Add Friend
+                </Button>
               }
               { props.uid !== user.id ?
-                <Button onClick={() => navigate(`/users/${user.id}`)}>View Profile</Button>
+                <Button 
+                  onClick={() => navigate(`/users/${user.id}`)}
+                  variant='contained'
+                  color='secondary'
+                  sx={{
+                    margin: '1vh',
+                  }}
+                >
+                  View Profile
+                </Button>
               : null
               }
             </CardContent>

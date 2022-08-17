@@ -33,12 +33,37 @@ function App() {
 
   const [currentId, setCurrentId] = useState('-1');
   const [username, setUsername] = useState('');
-  const [userData, setUserData] = useState({});
   const navigate = useNavigate();
 
   const loginUser = () => {
     navigate("/");
   };
+
+  const theme = createTheme({
+    typography: {
+      fontFamily: 'Quicksand'
+    },
+    palette: {
+      primary: {
+        main: '#0c51c2',
+      },
+      secondary: {
+        main: '#7a1ba6',
+      },
+      success: {
+        main: '#027a0e',
+      },
+      error: {
+        main: '#de0b00',
+      },
+      warning: {
+        main: '#ff9500'
+      },
+      info: {
+        main: '#ffea00',
+      }
+    },
+  });
 
   const openCurrentProjects = async () => {
     navigate(`/${user.uid}/current_projects`);
@@ -67,20 +92,10 @@ function App() {
     }
   }, [currentId]);
 
-  const loadUserData = async () => {
-    await firestore.collection('users').doc(user.uid).get().then(doc => {
-      setUserData(doc.data());
-    })
-  }
-
-  useEffect(() => {
-    if (user) {
-      loadUserData();
-    };
-  }, [user])
 
   return (
     <div className="page">
+      <ThemeProvider theme={theme}>
       { !user ?
         <LoginPage
           auth={auth}
@@ -88,6 +103,7 @@ function App() {
           onLogin={() => loginUser()}
         />
       : 
+
       <Routes>
         <Route
           exact
@@ -182,6 +198,7 @@ function App() {
         />
       </Routes>
       }
+      </ThemeProvider>
     </div>
   );
 }

@@ -23,6 +23,12 @@ code {
 }
 
 
+.tab-button {
+  text-size-adjust: 6pt;
+  width: 9vw;
+  height: 7vh;
+}
+
 .select-flexbox {
   display: flex;
   flex-direction: row;
@@ -39,6 +45,13 @@ code {
 
 .select-flexbox-bar {
   width: 7vw;
+}
+
+.user-instrument-list {
+  display: flex;
+  flex-direction: row;
+  margin: 1vh;
+  gap: 1vw;
 }
 
 

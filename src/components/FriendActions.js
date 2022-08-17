@@ -64,12 +64,14 @@ const FriendActions = (props) => {
             <Button 
               onClick={() => acceptFriendRequest()}
               variant='contained'
+              color='success'
             >
               Accept
             </Button>
             <Button 
               onClick={() => denyFriendRequest()}
               variant='contained'
+              color='error'
             >
                 Deny
               </Button>
@@ -79,6 +81,7 @@ const FriendActions = (props) => {
             <Button 
               onClick={() => retractFriendRequest()}
               variant='contained'
+              color='error'
             >
               Remove Request
             </Button>
@@ -88,6 +91,7 @@ const FriendActions = (props) => {
             <Button 
               onClick={() => removeFriend()}
               variant='contained'
+              color='error'
             >
               Remove Friend
             </Button>
@@ -97,6 +101,7 @@ const FriendActions = (props) => {
             <Button 
               onClick={() => sendFriendRequest()}
               variant='contained'
+              color='success'
             >
               Send Request
             </Button>

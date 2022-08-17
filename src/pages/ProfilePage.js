@@ -1,6 +1,5 @@
-import { Button, Card, CardContent, CardHeader, Switch, TextField, Typography } from '@mui/material';
-import { fontGrid } from '@mui/material/styles/cssUtils';
-import React, { useState, useEffect, useDeferredValue } from 'react'
+import { Button, Card, CardContent, CardHeader, Grid, Switch, TextField, Typography } from '@mui/material';
+import React, { useState, useEffect} from 'react'
 import Loading from '../components/Loading';
 import CHANGE_USERNAME from '../reducers/CHANGE_USERNAME';
 
@@ -19,6 +18,14 @@ const ProfilePage = (props) => {
     vocals: false,
   });
   const [loading, setLoading] = useState(true);
+  const [originalInstruments, setOriginalInstruments] = useState({
+    bass: false,
+    drums: false,
+    guitar: false,
+    keyboards: false,
+    vocals: false,
+  });
+  const [savedChanges, setSavedChanges] = useState(true);
 
   const loadUserData = async () => {
     await props.userRef.get().then((doc) => {
@@ -49,9 +56,13 @@ const ProfilePage = (props) => {
     if (doc.data().instruments.includes('vocals')) {
       instrumentBooleanCatcher.vocals = true;
     }
+    setOriginalInstruments(instrumentBooleanCatcher);
     setInstruments(instrumentBooleanCatcher);
+    setSavedChanges(true);
     });
   };
+
+  
 
   const openNameChanger = () => {
     setNameChanger({
@@ -100,11 +111,18 @@ const ProfilePage = (props) => {
       })
     };
 
+    setSavedChanges(true);
   }
 
   useEffect(() => {
     loadUserData();
   }, []);
+
+  useEffect(() => {
+    if (instruments !== originalInstruments) {
+      setSavedChanges(false);
+    }
+  }, [instruments])
 
   return (
     <div className='page'>
@@ -173,7 +191,7 @@ const ProfilePage = (props) => {
               flexDirection: 'row',
               flexWrap: 'wrap',
               width: '25vw',
-              height: '30vh',
+              height: '40vh',
               overflowY: 'scroll',
               float: 'right',
               marginTop: '-45vh',
@@ -184,61 +202,98 @@ const ProfilePage = (props) => {
             <Typography
               sx={{
                 marginRight: '2vw',
+                marginBottom: '2vh',
               }}
             >
               Select The Instruments You Can Play
             </Typography>
-            <Typography>Bass: </Typography>
-            <Switch
-              checked={instruments.bass}
-              onChange={() => setInstruments({...instruments, bass: !instruments.bass})}
-              sx={{
-                marginLeft: '3.5vw',
-                marginRight: '10.5vw',
-              }}
-            />
-            <Typography>Drums: </Typography>
-            <Switch
-              checked={instruments.drums}
-              onChange={() => setInstruments({...instruments, drums: !instruments.drums})}
-              sx={{
-                marginLeft: '3.5vw',
-                marginRight: '10.5vw',
-              }}
-            />
-            <Typography>Guitar: </Typography>
-            <Switch
-              checked={instruments.guitar}
-              onChange={() => setInstruments({...instruments, guitar: !instruments.guitar})}
-              sx={{
-                marginLeft: '3.5vw',
-                marginRight: '10.5vw',
-              }}
-            />
-            <Typography>Keyboards: </Typography>
-            <Switch
-              checked={instruments.keyboards}
-              onChange={() => setInstruments({...instruments, keyboards: !instruments.keyboards})}
-              sx={{
-                marginLeft: '2.5vw',
-                marginRight: '10.5vw',
-              }}
-            />
-            <Typography>Vocals: </Typography>
-            <Switch
-              checked={instruments.vocals}
-              onChange={() => setInstruments({...instruments, vocals: !instruments.vocals})}
-              sx={{
-                marginLeft: '3.5vw',
-                marginRight: '10.5vw',
-              }}
-            />
-            <Button 
-              onClick={() => saveInstrumentChanges()}
-              variant='outlined'
+            <Grid 
+              container
+              columns={12}
+              columnSpacing={4}
             >
-              Save Changes
-            </Button>
+              <Grid
+                item
+                lg={6}
+              >
+                <Typography>
+                  Bass: 
+                </Typography>
+              </Grid>
+              <Grid item lg={6}>
+                <Switch
+                  checked={instruments.bass}
+                  onChange={() => setInstruments({...instruments, bass: !instruments.bass})}
+                  sx={{
+                    marginLeft: '3.5vw',
+                  }}
+                />
+              </Grid>
+              <Grid item lg={6}>
+                <Typography>Drums: </Typography>
+              </Grid>
+              <Grid item lg={6}>
+                <Switch
+                  checked={instruments.drums}
+                  onChange={() => setInstruments({...instruments, drums: !instruments.drums})}
+                  sx={{
+                    marginLeft: '3.5vw',
+                  }}
+                />
+              </Grid>
+              <Grid item lg={6}>
+                <Typography>Guitar: </Typography>
+              </Grid>
+              <Grid item lg={6}>
+              <Switch
+                checked={instruments.guitar}
+                onChange={() => setInstruments({...instruments, guitar: !instruments.guitar})}
+                sx={{
+                  marginLeft: '3.5vw',
+                }}
+              />
+              </Grid>
+              <Grid item lg={6}>
+                <Typography>Keyboards: </Typography>
+              </Grid>
+              <Grid item lg={6}>
+                <Switch
+                  checked={instruments.keyboards}
+                  onChange={() => setInstruments({...instruments, keyboards: !instruments.keyboards})}
+                  sx={{
+                    marginLeft: '3.5vw',
+                  }}
+                />
+              </Grid>
+              <Grid item lg={6}>
+                <Typography>Vocals: </Typography>
+              </Grid>
+              <Grid item lg={6}>
+                <Switch
+                  checked={instruments.vocals}
+                  onChange={() => setInstruments({...instruments, vocals: !instruments.vocals})}
+                  sx={{
+                    marginLeft: '3.5vw',
+                  }}
+                />
+              </Grid>
+            </Grid>
+            { originalInstruments === instruments ? null 
+            : !savedChanges ?
+              <Button 
+                onClick={() => saveInstrumentChanges()}
+                variant='outlined'
+              >
+                Save Changes
+              </Button>
+              :
+              <Button
+                disabled
+                variant='success'
+              >
+                Changes Saved
+              </Button>
+            }
           </CardContent>
         </Card>
       }

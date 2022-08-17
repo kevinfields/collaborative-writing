@@ -30,8 +30,10 @@ function App() {
   const firestore = firebase.firestore();
   const background = document.getElementsByTagName("html")[0];
   const [user] = useAuthState(auth);
+
   const [currentId, setCurrentId] = useState('-1');
   const [username, setUsername] = useState('');
+  const [userData, setUserData] = useState({});
   const navigate = useNavigate();
 
   const loginUser = () => {
@@ -64,6 +66,18 @@ function App() {
       navigate(`/${user.uid}/current_projects/${currentId}`)
     }
   }, [currentId]);
+
+  const loadUserData = async () => {
+    await firestore.collection('users').doc(user.uid).get().then(doc => {
+      setUserData(doc.data());
+    })
+  }
+
+  useEffect(() => {
+    if (user) {
+      loadUserData();
+    };
+  }, [user])
 
   return (
     <div className="page">
@@ -161,6 +175,7 @@ function App() {
             <OtherProfilePage
               usersRef={firestore.collection('users')}
               userRef={firestore.collection('users').doc(user.uid)}
+              uid={user.uid}
               currentProjectsRef={firestore.collection('currentProjects')}
             />
           }
